@@ -8,8 +8,27 @@ function WeatherCard({ weatherData, cityName }) {
     );
   }
 
+  const convertToMilitary = (unixTime) => {
+    const date = new Date(unixTime * 1000)
+    const hours = String(date.getHours()).padStart(2, '0')
+    const mintues = String(date.getMinutes()).padStart(2, '0')
+    return `${hours} : ${mintues}`
+  }
+
+
+  const weatherCardObjects = 
+    [
+      { label: 'Feels like', value: `${Math.round(weatherData.main.feels_like)}°F` },
+      { label: 'Humidity',   value: `${weatherData.main.humidity}%` },
+      { label: 'Wind',       value: `${Math.round(weatherData.wind?.speed)} mph` },
+      {label: "Gust",        value: `${Math.round(weatherData.wind.gust)} mph`},
+      {label: "Sunrise",     value: `${convertToMilitary(weatherData.sys.sunrise)}`},
+      {label: "Sunset",     value: `${convertToMilitary(weatherData.sys.sunset)}`}
+    ]
+
+
   return (
-    <div className="w-full max-w-md rounded-3xl p-10 text-white"
+    <div className="w-full max-w-md rounded-3xl p-14 text-white mx-5"
       style={{
         background: 'rgba(255,255,255,0.08)',
         border: '1px solid rgba(255,255,255,0.15)',
@@ -27,11 +46,7 @@ function WeatherCard({ weatherData, cityName }) {
       </p>
 
       <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: 'Feels like', value: `${Math.round(weatherData.main.feels_like)}°F` },
-          { label: 'Humidity',   value: `${weatherData.main.humidity}%` },
-          { label: 'Wind',       value: `${Math.round(weatherData.wind?.speed)} mph` },
-        ].map(({ label, value }) => (
+        {weatherCardObjects.map(({ label, value }) => (
           <div key={label} className="rounded-2xl p-4"
             style={{ background: 'rgba(255,255,255,0.07)' }}>
             <p className="text-[11px] tracking-widest uppercase text-white/35 mb-1">{label}</p>
